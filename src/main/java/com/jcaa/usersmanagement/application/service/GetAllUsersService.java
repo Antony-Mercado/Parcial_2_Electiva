@@ -6,6 +6,7 @@ import com.jcaa.usersmanagement.domain.model.UserModel;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Collections;
 
 @RequiredArgsConstructor
 public final class GetAllUsersService implements GetAllUsersUseCase {
@@ -13,17 +14,13 @@ public final class GetAllUsersService implements GetAllUsersUseCase {
   private final GetAllUsersPort getAllUsersPort;
 
   @Override
-  public List<UserModel> execute() {
-    final List<UserModel> users = getAllUsersPort.getAll();
-    // VIOLACIÓN Regla 5 (Reglas 1.md): ningún método debe retornar null.
-    // VIOLACIÓN Regla 21 (Clean Code — no retornar banderas de error):
-    // null se usa aquí como "código especial de resultado vacío".
-    // El contrato de salida no diferencia entre error, lista vacía y resultado válido:
-    //   ¿null significa "ocurrió un error" o "no hay usuarios"?
-    // Solución: retornar Collections.emptyList() cuando no hay usuarios.
-    if (users.isEmpty()) {
-      return null;
-    }
-    return users;
+public List<UserModel> execute() {
+  final List<UserModel> users = getAllUsersPort.getAll();
+
+  if (users.isEmpty()) {
+    return Collections.emptyList();
   }
+
+  return users;
+}
 }
